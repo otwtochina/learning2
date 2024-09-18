@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Clone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+            position: relative;
+        }
+        .user {
+            align-self: flex-end;
+            background-color: #007bff;
+        }
+        .bot {
+            align-self: flex-start;
+            background-color: #444;
+        }
+        .timestamp {
+            font-size: 0.8em;
+            color: #bbb;
+            position: absolute;
+            bottom: -15px;
+            right: 10px;
+        }
+        .input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #333;
+            background-color: #1e1e1e;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+        }
+        button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container" id="chatContainer">
+        <!-- Chat messages will appear here -->
+    </div>
+    <div class="input-container">
+        <input type="text" id="userInput" placeholder="Type your message..." />
+        <button id="sendButton" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const sendButton = document.getElementById('sendButton');
+        const userInput = document.getElementById('userInput');
+
+        // Enable/disable button based on input
+        userInput.addEventListener('input', () => {
+            sendButton.disabled = userInput.value.trim() === '';
+        });
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message === '') return;
+
+            // Display user message
+            displayMessage(message, 'user');
+
+            // Clear input field
+            userInput.value = '';
+            sendButton.disabled = true; // Disable button until new input
+
+            // Simulate bot response after a short delay
+            setTimeout(() => {
+                const botResponse = generateBotResponse(message);
+                displayMessage(botResponse, 'bot');
+            }, 1000);
+        }
+
+        function displayMessage(message, sender) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageElement = document.createElement('div');
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            messageElement.className = `message ${sender}`;
+            messageElement.textContent = message;
+
+            const timestampElement = document.createElement('span');
+            timestampElement.className = 'timestamp';
+            timestampElement.textContent = timestamp;
+
+            messageElement.appendChild(timestampElement);
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
+        }
+
+        function generateBotResponse(userMessage) {
+            // Simple bot response simulation
+            return `You said: "${userMessage}"`;
+        }
+    </script>
+
+</body>
+</html>
